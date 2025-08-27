@@ -51,8 +51,8 @@ for i in st.session_state.c_text:
 
 if prompt := st.chat_input("Say something", key="prompt"):
     st.session_state.c_text.append({"role": "user", "content": prompt})
-        with st.chat_message("user"):
-            st.markdown(prompt)
+    with st.chat_message("user"):
+        st.markdown(prompt)
     if st.session_state.resp_id is None:
         response = client.responses.create(
             model=model,
