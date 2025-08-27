@@ -19,7 +19,7 @@ with st.sidebar:
     ]
     model = st.selectbox("Models", model_list, key="model")
     instruct = st.text_area("Instruct", "", key="instruct")
-    max_tokens = st.slider("Max Tokens", 1, 32768, 16384, 1, key="tokens")
+    max_tokens = st.slider("Max Tokens", 1, 64000, 64000, 1, key="tokens")
     temperature = st.slider("Temperature", 0.00, 2.00, 1.00, 0.01, key="temp")
     top_p = st.slider("Top P", 0.00, 1.00, 0.70, 0.01, key="top_p")
 
@@ -57,7 +57,7 @@ if prompt := st.chat_input("Say something", key="prompt"):
         response = client.responses.create(
             model=model,
             input=prompt,
-            max_tokens=max_tokens,
+            max_output_tokens=max_tokens,
             temperature=temperature,
             top_p=top_p,
             stream=True
@@ -67,7 +67,7 @@ if prompt := st.chat_input("Say something", key="prompt"):
             model=model,
             previous_response_id=st.session_state.resp_id,
             input=[{"role": "user", "content": prompt}],
-            max_tokens=max_tokens,
+            max_output_tokens=max_tokens,
             temperature=temperature,
             top_p=top_p,
             stream=True
