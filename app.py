@@ -72,16 +72,27 @@ if prompt := st.chat_input("Say something", key="prompt"):
       top_p=top_p,
       stream=True
     )
+
+  c_text = ""
+  r_text = ""
+
+  with st.expander("Thinking", True):
+    r_placeholder = st.empty()
+  with st.chat_message("assistant"):
+    c_placeholder = st.empty()
+  
   try:
     for event in response:
-      if event.type == "response.reasoning_summary_part.added":
-        pass
-      elif event.type == "response.reasoning_summary_text.delta":
-        pass
+      if event.type == "response.reasoning_summary_text.delta":
+        r_text += event.delta
+        r_placeholder.markdown(event.delta)
       elif event.type == "response.output_text.delta":
-        pass
+        c_text += event.delta
+        c_placeholder.markdown(event.delta)
       elif event.type == "response.completed":
         st.session_state.resp_id = event.response.id
+    st.session_state.r_text.append(r_text)
+    st.session_state.c_text.append({"role": "assistant", "content": c_text})
     st.rerun()
   except Exception as e:
     st.error(e)
